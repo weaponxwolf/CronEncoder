@@ -1,0 +1,7 @@
+out/
+
+src/main/java/com/englishtocron/Main.java
+
+target/
+
+/.idea
