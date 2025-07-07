@@ -1,2 +1,2 @@
 # CronEncoder for Java
-### Converts English Phrases to Cron Expression
+### Converts English Phrases to Cron Expressions
