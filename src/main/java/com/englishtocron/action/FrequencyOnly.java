@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class FrequencyOnly {
+    private FrequencyOnly() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("^[0-9]+$");
 
     public static boolean tryFromToken(String str) {

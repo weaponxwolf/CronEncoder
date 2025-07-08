@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class Minute {
+    private Minute() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)(minutes|minute|mins|min)");
     private static final Pattern RE_MINUTES = Pattern.compile("(?i)^(minutes|minute|mins|min)$");
 

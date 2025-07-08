@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Year {
+    private Year() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)((years|year)|([0-9]{4}[0-9]*(( ?and)?,? ?))+)$");
     private static final Pattern RE_YEARS = Pattern.compile("(?i)^(years|year)$");
     private static final Pattern RE_NUMERIC = Pattern.compile("[0-9]+");

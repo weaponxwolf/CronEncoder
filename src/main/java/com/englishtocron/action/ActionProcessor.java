@@ -4,6 +4,9 @@ import com.englishtocron.Cron;
 import com.englishtocron.Error;
 
 public class ActionProcessor {
+    private ActionProcessor() {
+        // Prevent instantiation
+    }
 
     public static Kind tryFromToken(String token) {
         for (Kind stateKind : Kind.iterator()) {
@@ -43,7 +46,7 @@ public class ActionProcessor {
                     isMatch = RangeEnd.tryFromToken(token);
                     break;
                 case OnlyOn:
-                    isMatch = token.toLowerCase().equals("only on");
+                    isMatch = token.equalsIgnoreCase("only on");
                     break;
             }
             if (isMatch) {

@@ -12,7 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day {
-    private static final Pattern RE_MATCH = Pattern.compile("(?i)^((days|day)|(((monday|tuesday|wednesday|thursday|friday|saturday|sunday|WEEKEND|MON|TUE|WED|THU|FRI|SAT|SUN)( ?and)?,? ?)+))$");
+    private Day() {
+        // Prevent instantiation
+    }
+    private static String days="monday|tuesday|wednesday|thursday|friday|saturday|sunday|WEEKEND|MON|TUE|WED|THU|FRI|SAT|SUN";
+    private static final Pattern RE_MATCH = Pattern.compile("(?i)^((days|day)|((((" + days + ")( ?and)?,? ?)+))$");
     private static final Pattern RE_DAY = Pattern.compile("(?i)^(day|days)$");
     private static final Pattern RE_WEEKDAYS = Pattern.compile("(?i)(MON|TUE|WED|THU|FRI|SAT|SUN|WEEKEND)");
 
@@ -96,14 +100,18 @@ public class Day {
 
             for (String day : WEEK_DAYS) {
                 if (days.contains(day) && !cron.syntax.dayOfWeek.contains(day)) {
-                    cron.syntax.dayOfWeek += day + ",";
+                    StringBuilder sb = new StringBuilder(cron.syntax.dayOfWeek);
+                    sb.append(day).append(",");
+                    cron.syntax.dayOfWeek = sb.toString();
                 }
             }
 
             if (days.contains("WEEKEND")) {
                 for (String day : new String[]{"SAT", "SUN"}) {
                     if (!cron.syntax.dayOfWeek.contains(day)) {
-                        cron.syntax.dayOfWeek += day + ",";
+                        StringBuilder sb = new StringBuilder(cron.syntax.dayOfWeek);
+                        sb.append(day).append(",");
+                        cron.syntax.dayOfWeek = sb.toString();
                     }
                 }
             }

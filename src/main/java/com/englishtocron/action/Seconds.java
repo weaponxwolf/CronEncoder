@@ -6,6 +6,9 @@ import com.englishtocron.Stack;
 import java.util.regex.Pattern;
 
 public class Seconds {
+    private Seconds() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)(seconds|second|sec|secs)");
     private static final Pattern RE_SECUND = Pattern.compile("^(seconds|second|sec|secs)$");
 
