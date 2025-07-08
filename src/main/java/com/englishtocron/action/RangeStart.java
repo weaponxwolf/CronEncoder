@@ -6,6 +6,9 @@ import com.englishtocron.Stack;
 import java.util.regex.Pattern;
 
 public class RangeStart {
+    private RangeStart() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)(between|starting|start)");
     private static final Pattern RE_MATCH_BETWEEN = Pattern.compile("(?i)(between)");
 

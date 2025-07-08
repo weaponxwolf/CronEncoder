@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class RangeEnd {
+    private RangeEnd() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)(to|through|ending|end|and)");
     private static final Pattern RE_MATCH_AND = Pattern.compile("(?i)(and)");
 

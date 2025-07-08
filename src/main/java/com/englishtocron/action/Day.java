@@ -12,6 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day {
+
+    private Day() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)^((days|day)|(((monday|tuesday|wednesday|thursday|friday|saturday|sunday|WEEKEND|MON|TUE|WED|THU|FRI|SAT|SUN)( ?and)?,? ?)+))$");
     private static final Pattern RE_DAY = Pattern.compile("(?i)^(day|days)$");
     private static final Pattern RE_WEEKDAYS = Pattern.compile("(?i)(MON|TUE|WED|THU|FRI|SAT|SUN|WEEKEND)");

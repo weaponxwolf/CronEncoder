@@ -10,6 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClockTime {
+    private ClockTime() {
+        // Prevent instantiation
+    }
+
     private static final Pattern RE_MATCH = Pattern.compile("(?i)^([0-9]+:)?[0-9]+ *(AM|PM)$|^([0-9]+:[0-9]+)$|(noon|midnight)");
     private static final Pattern RE_HOUR = Pattern.compile("^[0-9]+");
     private static final Pattern RE_MINUTE = Pattern.compile(":[0-9]+");

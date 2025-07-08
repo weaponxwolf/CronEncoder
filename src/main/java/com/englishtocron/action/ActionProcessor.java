@@ -5,6 +5,10 @@ import com.englishtocron.Error;
 
 public class ActionProcessor {
 
+    private ActionProcessor() {
+        // Prevent instantiation
+    }
+
     public static Kind tryFromToken(String token) {
         for (Kind stateKind : Kind.iterator()) {
             boolean isMatch = false;

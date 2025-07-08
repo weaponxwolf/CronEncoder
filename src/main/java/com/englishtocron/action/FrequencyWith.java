@@ -9,6 +9,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FrequencyWith {
+
+    private FrequencyWith() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("^[0-9]+(th|nd|rd|st)$");
     private static final Pattern RE_NUMERIC_PREFIX = Pattern.compile("^[0-9]+");
 

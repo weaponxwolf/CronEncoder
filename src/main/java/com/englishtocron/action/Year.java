@@ -13,6 +13,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Year {
+
+    private Year() {
+        // Prevent instantiation
+    }
     // Accepts year keywords and simple lists
     private static final Pattern RE_MATCH = Pattern.compile(
         "(?i)^\\s*(in|on|during)?\\s*(years?|(?:[0-9]{4})(?:\\s*(?:and|,)?\\s*[0-9]{4})*)\\s*$"

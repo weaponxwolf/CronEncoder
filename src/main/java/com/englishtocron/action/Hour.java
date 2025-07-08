@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class Hour {
+    private  Hour() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)(hour|hrs|hours)");
     private static final Pattern RE_HOUR = Pattern.compile("^(hour|hrs|hours)$");
 

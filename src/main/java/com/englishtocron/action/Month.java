@@ -12,6 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Month {
+    private Month() {
+        // Prevent instantiation
+    }
     private static final Pattern RE_MATCH = Pattern.compile("(?i)^((months|month)|(((january|february|march|april|may|june|july|august|september|october|november|december|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEPT|OCT|NOV|DEC)( ?and)?,? ?)+))$");
     private static final Pattern RE_MONTH = Pattern.compile("(?i)^(month|months)$");
     private static final Pattern RE_MONTHS_ABBREVIATION = Pattern.compile("(?i)(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)");
