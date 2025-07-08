@@ -128,15 +128,25 @@ Partial sentences: "every minute on thursday"
 Feature	Example Input
 
 Seconds	"Run every 5 second"
+
 Minutes	"every 2 minutes on Thursday"
+
 Hours	"Run every 3 hours"
+
 Days	"Run every 4 days"
+
 Specific Time	"Run at 10:00 am"
+
 Time Ranges	"between 6:00 am and 9:00 am"
+
 Days of Week	"Monday through Thursday"
+
 Multiple Times	"4pm, 5pm, and 7pm"
+
 Specific Dates	"on the 12th day"
+
 Months	"on September", "from January to March"
+
 Years	"in 2020 and 2024"
 
 
