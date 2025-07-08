@@ -26,6 +26,9 @@ public class EnglishToCronConverterTest {
     @Parameterized.Parameters(name = "{index}: \"{0}\" => \"{1}\"")
     public static Collection<Object[]> cronTestCases() {
         return Arrays.asList(new Object[][]{
+                {"Run every hour on Monday, tuesday and thursday in years 2025, 2026 and 2027 between 12pm and 3pm ","0 0 12-15 ? * MON,TUE,THU 2025,2026,2027"},
+                {"Run every hour on Monday, tuesday and thursday in years 2025, 2026 and 2027 between 12pm and 3pm ","0 0 12-15 ? * MON,TUE,THU 2025,2026,2027"},
+                {"Run every 5 days in january only in 2025 between 12pm and 3pm ",""},
                 {"Run every second", "* * * * * ? *"},
                 {"every 5 second", "0/5 * * * * ? *"},
                 {"every 5 second on september", "0/5 * * * SEP ? *"},

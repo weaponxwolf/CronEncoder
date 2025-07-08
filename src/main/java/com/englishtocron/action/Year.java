@@ -1,4 +1,3 @@
-
 package com.englishtocron.action;
 
 import com.englishtocron.Cron;
@@ -14,74 +13,109 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Year {
-    private static final Pattern RE_MATCH = Pattern.compile("(?i)((years|year)|([0-9]{4}[0-9]*(( ?and)?,? ?))+)$");
-    private static final Pattern RE_YEARS = Pattern.compile("(?i)^(years|year)$");
-    private static final Pattern RE_NUMERIC = Pattern.compile("[0-9]+");
-    private static final Pattern RE_YEAR_FORMAT = Pattern.compile("^[0-9]{4}$");
+    // Accepts year keywords and simple lists
+    private static final Pattern RE_MATCH = Pattern.compile(
+        "(?i)^\\s*(in|on|during)?\\s*(years?|(?:[0-9]{4})(?:\\s*(?:and|,)?\\s*[0-9]{4})*)\\s*$"
+    );
+
+    private static final Pattern RE_YEARS = Pattern.compile("(?i)^\\s*(in|on|during)?\\s*years?\\s*$");
+
+    private static final Pattern RE_NUMERIC = Pattern.compile("\\b[0-9]{4}\\b");
+
+    // NEW: Match range expressions like "from 2023 to 2025"
+    private static final Pattern RE_RANGE = Pattern.compile(
+        "(?i)(?:from|between|starting)\\s*([0-9]{4})\\s*(?:to|and|ending|end)\\s*([0-9]{4})"
+    );
 
     public static boolean tryFromToken(String str) {
-        return RE_MATCH.matcher(str).matches();
+        return RE_MATCH.matcher(str).matches()
+                || RE_RANGE.matcher(str).matches()
+                || RE_NUMERIC.matcher(str).find();
     }
 
     public static void process(String token, Cron cron) throws Error {
+        token = token.trim();
+
+        // Handle keyword-only: "years", "in years", etc.
         if (RE_YEARS.matcher(token).matches()) {
-            cron.syntax.year = "?";
+            cron.syntax.year = "*";
             if (!cron.stack.isEmpty()) {
                 Stack element = cron.stack.get(cron.stack.size() - 1);
-                if (element.owner == Kind.FrequencyOnly) {
-                    cron.syntax.year = String.format("0/%s", element.frequencyToString());
-                    cron.stack.remove(cron.stack.size() - 1);
-                } else if (element.owner == Kind.FrequencyWith) {
-                    cron.syntax.year = element.frequencyToString();
-                } else {
-                    cron.syntax.year = "*";
+                switch (element.owner) {
+                    case FrequencyOnly:
+                        cron.syntax.year = "0/" + element.frequencyToString();
+                        cron.stack.remove(cron.stack.size() - 1);
+                        break;
+                    case FrequencyWith:
+                        cron.syntax.year = element.frequencyToString();
+                        break;
+                    default:
+                        cron.syntax.year = "*";
                 }
             }
-        } else {
-            Matcher matches = RE_NUMERIC.matcher(token);
+        }
+
+        // Handle range: "from 2024 to 2025", etc.
+        else if (RE_RANGE.matcher(token).find()) {
+            Matcher range = RE_RANGE.matcher(token);
+            if (range.find()) {
+                int start = Integer.parseInt(range.group(1));
+                int end = Integer.parseInt(range.group(2));
+                if (start > end) {
+                    throw Error.incorrectValue("year", "start year must be <= end year");
+                }
+                cron.syntax.year = start + "-" + end;
+            } else {
+                throw Error.incorrectValue("year", "Unrecognized range format: " + token);
+            }
+        }
+
+        // Handle year list: "2023, 2024 and 2025"
+        else {
+            Matcher matcher = RE_NUMERIC.matcher(token);
             List<Integer> years = new ArrayList<>();
-            while (matches.find()) {
-                String yearStr = matches.group();
-                if (RE_YEAR_FORMAT.matcher(yearStr).matches()) {
-                    try {
-                        years.add(Integer.parseInt(yearStr));
-                    } catch (NumberFormatException e) {
-                        // Should not happen if RE_YEAR_FORMAT matches
-                    }
+            while (matcher.find()) {
+                try {
+                    years.add(Integer.parseInt(matcher.group()));
+                } catch (NumberFormatException e) {
+                    throw Error.incorrectValue("year", "Invalid year: " + matcher.group());
                 }
             }
 
+            if (years.isEmpty()) {
+                throw Error.incorrectValue("year", "No valid 4-digit years found in: " + token);
+            }
+
+            // Stack-based range handling
             if (!cron.stack.isEmpty()) {
                 Stack element = cron.stack.get(cron.stack.size() - 1);
                 if (element.owner == Kind.RangeStart) {
                     element.year = Optional.of(new StartEnd(
-                            years.stream().findFirst().map(Optional::of).orElse(Optional.empty()),
-                            element.year.flatMap(y -> y.end)
+                        Optional.of(years.get(0)),
+                        element.year.flatMap(y -> y.end)
                     ));
                     return;
                 } else if (element.owner == Kind.RangeEnd) {
-                    StartEnd year = new StartEnd(
-                            element.year.flatMap(y -> y.start),
-                            years.stream().findFirst().map(Optional::of).orElse(Optional.empty())
-                    );
+                    Optional<Integer> start = element.year.flatMap(y -> y.start);
+                    Optional<Integer> end = Optional.of(years.get(0));
 
-                    cron.syntax.year = String.format(
-                            "%d-%d",
-                            year.start.orElse(0),
-                            year.end.orElse(0)
-                    );
-                    cron.stack.remove(cron.stack.size() - 1);
-                    return;
+                    if (start.isPresent() && end.isPresent()) {
+                        cron.syntax.year = String.format("%d-%d", start.get(), end.get());
+                        cron.stack.remove(cron.stack.size() - 1);
+                        return;
+                    } else {
+                        throw Error.incorrectValue("year", "Incomplete range: " + token);
+                    }
                 }
             }
-            if (years.isEmpty()) {
-                throw Error.incorrectValue("year", String.format("value %s is not a year format", token));
-            }
+
+            // Regular list of years
             cron.syntax.year = years.stream()
-                    .map(String::valueOf)
-                    .collect(Collectors.joining(","));
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
         }
 
+        // Final: push Year to stack
         cron.stack.add(Stack.builder(Kind.Year).build());
     }
 }
