@@ -26,8 +26,7 @@ public class RangeEnd {
             element.isAndConnector = isAnd;
 
             switch (element.owner) {
-                case FrequencyWith:
-                case FrequencyOnly:
+                case FrequencyWith, FrequencyOnly:
                     element.frequencyStart = element.frequency;
                     break;
                 case Day:
@@ -42,13 +41,7 @@ public class RangeEnd {
                 case RangeStart:
                     element.owner = Kind.RangeEnd;
                     break;
-                case Year:
-                case ClockTime:
-                case Minute:
-                case Hour:
-                case RangeEnd:
-                case Second:
-                case OnlyOn:
+                case Year, ClockTime, Minute, Hour, RangeEnd, Second, OnlyOn:
                     break;
             }
             element.owner = Kind.RangeEnd;

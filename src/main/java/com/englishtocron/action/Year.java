@@ -17,19 +17,19 @@ public class Year {
     private Year() {
         // Prevent instantiation
     }
-    // Accepts year keywords and simple lists
+
     private static final Pattern RE_MATCH = Pattern.compile(
-        "(?i)^\\s*(in|on|during)?\\s*(years?|(?:[0-9]{4})(?:\\s*(?:and|,)?\\s*[0-9]{4})*)\\s*$"
+    "(?i)^\\s*(in|on|during)?\\s*(years?|(?:\\d{4})(?:\\s*(?:and|,)?\\s*\\d{4})*)\\s*$"
     );
 
     private static final Pattern RE_YEARS = Pattern.compile("(?i)^\\s*(in|on|during)?\\s*years?\\s*$");
 
-    private static final Pattern RE_NUMERIC = Pattern.compile("\\b[0-9]{4}\\b");
+    private static final Pattern RE_NUMERIC = Pattern.compile("\\b\\d{4}\\b");
 
-    // NEW: Match range expressions like "from 2023 to 2025"
     private static final Pattern RE_RANGE = Pattern.compile(
-        "(?i)(?:from|between|starting)\\s*([0-9]{4})\\s*(?:to|and|ending|end)\\s*([0-9]{4})"
+        "(?i)(?:from|between|starting)\\s*(\\d{4})\\s*(?:to|and|ending|end)\\s*(\\d{4})"
     );
+
 
     public static boolean tryFromToken(String str) {
         return RE_MATCH.matcher(str).matches()

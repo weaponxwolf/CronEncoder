@@ -100,14 +100,24 @@ public class Day {
 
             for (String day : WEEK_DAYS) {
                 if (days.contains(day) && !cron.syntax.dayOfWeek.contains(day)) {
-                    cron.syntax.dayOfWeek += day + ",";
+                    StringBuilder sb = new StringBuilder(cron.syntax.dayOfWeek);
+                    if (!sb.isEmpty()) {
+                        sb.append(",");
+                    }
+                    sb.append(day);
+                    cron.syntax.dayOfWeek = sb.toString();
                 }
             }
 
             if (days.contains("WEEKEND")) {
                 for (String day : new String[]{"SAT", "SUN"}) {
                     if (!cron.syntax.dayOfWeek.contains(day)) {
-                        cron.syntax.dayOfWeek += day + ",";
+                        StringBuilder sb = new StringBuilder(cron.syntax.dayOfWeek);
+                        if (!sb.isEmpty()) {
+                            sb.append(",");
+                        }   
+                        sb.append(day);
+                        cron.syntax.dayOfWeek = sb.toString();
                     }
                 }
             }

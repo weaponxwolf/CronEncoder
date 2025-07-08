@@ -13,8 +13,9 @@ public class FrequencyWith {
     private FrequencyWith() {
         // Prevent instantiation
     }
-    private static final Pattern RE_MATCH = Pattern.compile("^[0-9]+(th|nd|rd|st)$");
-    private static final Pattern RE_NUMERIC_PREFIX = Pattern.compile("^[0-9]+");
+    private static final Pattern RE_MATCH = Pattern.compile("^\\d+(th|nd|rd|st)$");
+    private static final Pattern RE_NUMERIC_PREFIX = Pattern.compile("^\\d+");
+
 
     public static boolean tryFromToken(String str) {
         return RE_MATCH.matcher(str).matches();

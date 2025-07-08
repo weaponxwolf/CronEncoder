@@ -11,7 +11,8 @@ public class FrequencyOnly {
     private FrequencyOnly() {
         // Prevent instantiation
     }
-    private static final Pattern RE_MATCH = Pattern.compile("^[0-9]+$");
+    private static final Pattern RE_MATCH = Pattern.compile("^\\d+$");
+
 
     public static boolean tryFromToken(String str) {
         return RE_MATCH.matcher(str).matches();

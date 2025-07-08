@@ -99,7 +99,12 @@ public class Month {
 
             for (String month : MONTHS) {
                 if (months.contains(month) && !cron.syntax.month.contains(month)) {
-                    cron.syntax.month += month + ",";
+                    StringBuilder sb = new StringBuilder(cron.syntax.month);
+                    if (!sb.isEmpty()) {
+                        sb.append(",");
+                    }
+                    sb.append(month);
+                    cron.syntax.month = sb.toString();
                 }
             }
             cron.syntax.month = cron.syntax.month.replaceAll(",$", "");

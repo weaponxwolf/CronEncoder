@@ -14,10 +14,11 @@ public class ClockTime {
         // Prevent instantiation
     }
 
-    private static final Pattern RE_MATCH = Pattern.compile("(?i)^([0-9]+:)?[0-9]+ *(AM|PM)$|^([0-9]+:[0-9]+)$|(noon|midnight)");
-    private static final Pattern RE_HOUR = Pattern.compile("^[0-9]+");
-    private static final Pattern RE_MINUTE = Pattern.compile(":[0-9]+");
-    private static final Pattern RE_NOON_MIDNIGHT = Pattern.compile("(noon|midnight)");
+    private static final Pattern RE_MATCH = Pattern.compile("(?i)^(\\d+:)?\\d+ *(AM|PM)$|^(\\d+:\\d+)$|(noon|midnight)");
+    private static final Pattern RE_HOUR = Pattern.compile("^\\d+");
+    private static final Pattern RE_MINUTE = Pattern.compile(":\\d+");
+    private static final Pattern RE_NOON_MIDNIGHT = Pattern.compile("(?i)(noon|midnight)");
+    private static final String CLOCK_TIME = "clock_time";
 
     public static boolean tryFromToken(String str) {
         return RE_MATCH.matcher(str).matches();
@@ -32,7 +33,7 @@ public class ClockTime {
             try {
                 hour = Integer.parseInt(hourMatcher.group());
             } catch (NumberFormatException e) {
-                throw Error.parseToNumber("clock_time", hourMatcher.group());
+                throw Error.parseToNumber(CLOCK_TIME, hourMatcher.group());
             }
         }
 
@@ -45,10 +46,10 @@ public class ClockTime {
                     try {
                         minute = Integer.parseInt(parts[1]);
                         if (minute >= 60) {
-                            throw Error.incorrectValue("clock_time", String.format("minute %d should be lower or equal to 60", minute));
+                            throw Error.incorrectValue(CLOCK_TIME, String.format("minute %d should be lower or equal to 60", minute));
                         }
                     } catch (NumberFormatException e) {
-                        throw Error.parseToNumber("clock_time", parts[1]);
+                        throw Error.parseToNumber(CLOCK_TIME, parts[1]);
                     }
                 }
             }
@@ -59,13 +60,13 @@ public class ClockTime {
             if (hour < 12) {
                 hour += 12;
             } else if (hour > 12) {
-                throw Error.incorrectValue("clock_time", String.format("please correct the time before PM. value: %d", hour));
+                throw Error.incorrectValue(CLOCK_TIME, String.format("please correct the time before PM. value: %d", hour));
             }
         } else if (lowerCaseToken.contains("am")) {
             if (hour == 12) {
                 hour = 0;
             } else if (hour > 12) {
-                throw Error.incorrectValue("clock_time", String.format("please correct the time before AM. value: %d", hour));
+                throw Error.incorrectValue(CLOCK_TIME, String.format("please correct the time before AM. value: %d", hour));
             }
         }
 

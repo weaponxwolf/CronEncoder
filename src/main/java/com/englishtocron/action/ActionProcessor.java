@@ -47,7 +47,7 @@ public class ActionProcessor {
                     isMatch = RangeEnd.tryFromToken(token);
                     break;
                 case OnlyOn:
-                    isMatch = token.toLowerCase().equals("only on");
+                    isMatch = token.equalsIgnoreCase("only on");
                     break;
             }
             if (isMatch) {
